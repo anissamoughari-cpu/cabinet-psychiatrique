@@ -28,15 +28,29 @@ export const getPatientById = (req, res) => {
 
 // 🟢 Créer un patient
 export const createPatient = (req, res) => {
-  const { firstName, lastName, age, gender, email, phone } = req.body;
+  const {
+    nom,
+    prenom,
+    age,
+    genre,
+    wilaya,
+    telephone,
+    numeroDossierAuto,
+    numeroDossierManuel,
+    profession
+  } = req.body;
 
-  if (!firstName || !lastName) {
-    return res.status(400).json({ message: "Champs obligatoires manquants" });
+  if (!nom || !prenom) {
+    return res.status(400).json({ message: "Nom et prénom sont obligatoires" });
   }
 
-  const sql = "INSERT INTO patients (firstName, lastName, age, gender, email, phone) VALUES (?, ?, ?, ?, ?, ?)";
-  db.query(sql, [firstName, lastName, age, gender, email, phone], (err, result) => {
+  const sql = `
+    INSERT INTO patients (nom, prenom, age, genre, wilaya, telephone, numeroDossierAuto, numeroDossierManuel, profession)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  db.query(sql, [nom, prenom, age, genre, wilaya, telephone, numeroDossierAuto, numeroDossierManuel, profession], (err, result) => {
     if (err) {
+      console.error("Erreur lors de la création :", err);
       return res.status(500).json({ message: "Erreur lors de la création du patient", error: err });
     }
     res.status(201).json({ message: "Patient créé avec succès", patientId: result.insertId });
@@ -46,10 +60,24 @@ export const createPatient = (req, res) => {
 // 🟢 Mettre à jour un patient
 export const updatePatient = (req, res) => {
   const { id } = req.params;
-  const { firstName, lastName, age, gender, email, phone } = req.body;
+  const {
+    nom,
+    prenom,
+    age,
+    genre,
+    wilaya,
+    telephone,
+    numeroDossierAuto,
+    numeroDossierManuel,
+    profession
+  } = req.body;
 
-  const sql = "UPDATE patients SET firstName=?, lastName=?, age=?, gender=?, email=?, phone=? WHERE id=?";
-  db.query(sql, [firstName, lastName, age, gender, email, phone, id], (err, result) => {
+  const sql = `
+    UPDATE patients
+    SET nom=?, prenom=?, age=?, genre=?, wilaya=?, telephone=?, numeroDossierAuto=?, numeroDossierManuel=?, profession=?
+    WHERE id=?
+  `;
+  db.query(sql, [nom, prenom, age, genre, wilaya, telephone, numeroDossierAuto, numeroDossierManuel, profession, id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Erreur lors de la mise à jour", error: err });
     }
@@ -68,7 +96,3 @@ export const deletePatient = (req, res) => {
     res.json({ message: "Patient supprimé avec succès" });
   });
 };
-
-
-
-

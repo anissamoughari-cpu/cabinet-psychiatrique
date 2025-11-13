@@ -383,11 +383,12 @@ export default function PatientForm({ patient, onSave, onCancel }: PatientFormPr
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-100"
                   >
                     <option value="">Sélectionner une commune</option>
-                    {communes.map((commune) => (
-                      <option key={commune} value={commune}>
-                        {commune}
-                      </option>
-                    ))}
+                    {[...new Set(communes)].map((commune) => (
+  <option key={commune} value={commune}>
+    {commune}
+  </option>
+))}
+
                   </select>
                 </div>
               </div>
